@@ -1,3 +1,4 @@
+// dados
 const proffys = [
     {
         name: "Polyana Cristina",
@@ -6,7 +7,7 @@ const proffys = [
         bio: "Entusiasta das melhores tecnologias de química avançada.<br><br>Apaixonado por explodir coisas em laboratório e por mudar a vida das pessoas através de experiências. Mais de 200.000 pessoas já passaram por uma das minhas explosões.",
         subject: "Química",
         cost: "20",
-        weelday: [0],
+        weekday: [0],
         time_from: [720],
         time_to: [1220]
     },
@@ -17,38 +18,85 @@ const proffys = [
         bio: "Entusiasta das melhores tecnologias de química avançada.<br><br>Apaixonado por explodir coisas em laboratório e por mudar a vida das pessoas através de experiências. Mais de 200.000 pessoas já passaram por uma das minhas explosões.",
         subject: "CF/88",
         cost: "50",
-        weelday: [2],
+        weekday: [2],
         time_from: [1720],
         time_to: [2220]
     }
-];
+]
 
+const subjects = [
+    "Artes",
+    "Biologia",
+    "Ciências",
+    "Educação Física",
+    "Física",
+    "Geografia",
+    "História",
+    "Matemática",
+    "Português",
+    "Química",
+]
+
+const weekdays = [
+    "Domingo",
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
+    "Sábado",
+]
+
+// funcionalidades
+
+function getSubject(subjectNumber) {
+    const position = +subjectNumber - 1;
+    return subjects[position]
+}
 function pageLanding(req, res){
     return res.render("index.html")
 }
 
 function pageStudy(req, res){
-    return res.render("study.html", {proffys})
+    //contem tds as informações que estão sendo enviadas pela pág req.query
+    console.log(req.query)
+    const filters = req.query;
+    return res.render("study.html", {proffys, filters, subjects, weekdays})
 }
 
 function pageGiveClasses(req, res){
-    return res.render("give-classes.html")
+    const data = req.query
+    console.log(data);
+    // Se tiver dados 
+    const isNotEmpty = Object.keys(data).length > 0;
+    if(isNotEmpty){
+        data.subject = getSubject(data.subject);
+        console.log("Adicionei Dados")
+        // Adicionar os dados a lista de proffys
+        proffys.push(data);
+
+        return res.redirect("/study");
+    }
+    
+    return res.render("give-classes.html", {subjects, weekdays})
 }
 
+// servidor
 const express = require('express');
 const server = express();
 
-//Configurar nunjucks
+//Configurar nunjucks (template engine)
 const nunjucks = require('nunjucks');
 nunjucks.configure('src/views', {
     express: server,
     noCache: true,
 })
+// Inicio e configuração do servidor 
 /* Configurar arquivos estáticos (css, script, images)*/
     server.use(express.static("public"))
 //Rotas da aplicação
     .get("/", pageLanding)
     .get("/study", pageStudy)
     .get("/give-classes", pageGiveClasses)
-
+// Start do servidor
     .listen(5500);

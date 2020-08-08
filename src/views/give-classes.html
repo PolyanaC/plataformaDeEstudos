@@ -28,7 +28,7 @@
                 </a>
                 <img src="/images/logo.svg" alt="logo">
             </div>
-        
+
             <div class="header-content">
                 <strong>Que incrível que você quer dar aulas</strong>
                 <p>O primeiro passo, é preencer esse formulário de inscrição</p>
@@ -66,31 +66,26 @@
                 <fieldset>
                     <legend>Sobre a aula</legend>
                     <div class="select-block">
-                        <label for="subject"></label>
+                        <label for="subject">Matéria</label>
                         <select name="subject" id="subject" requires>
                             <option value="">Selecione uma opção</option>
-                            <option value="1">Artes</option>
-                            <option value="2">Biologia</option>
-                            <option value="3">Ciências</option>
-                            <option value="4">Educação Física</option>
-                            <option value="5">Física</option>
-                            <option value="6">Geografia</option>
-                            <option value="7">História</option>
-                            <option value="8">Matemática</option>
-                            <option value="9">Português</option>
-                            <option value="10">Química</option>
+                            {% for subject in subjects %}
+                            <option value="{{ loop.index }}">
+                                {{subject}}
+                            </option>
+                            {% endfor %}
                         </select>
                     </div>
 
                     <div class="input-block">
-                        <label for="cost">Custo da sua aula
-                             <small>(R$)</small>
+                        <label for="cost">Custo da hora/aula
+                            <small>(R$)</small>
                         </label>
                         <input type="number" name="cost" id="cost" required>
                     </div>
                 </fieldset>
 
-                <fieldset id="schedule-items"> 
+                <fieldset id="schedule-items">
                     <legend>Horários disponíveis
                         <button type="button" id="add-time">+ Novo Horário</button>
                     </legend>
@@ -102,14 +97,12 @@
                             <select name="weekday[]" required>
                                 <!--Colchetes usados para agrupar mais de um valor do option-->
                                 <option value="">Selecione uma opção</option>
-                                <option value="0">Domingo</option>
-                                <option value="1">Segunda-feira</option>
-                                <option value="2">Terça-feira</option>
-                                <option value="3">Quarta-feira</option>
-                                <option value="4">Quinta-feira</option>
-                                <option value="5">Sexta-feira</option>
-                                <option value="6">Sábado</option>
-                            </select> 
+                                {% for weekday in weekdays %}
+                                <option value="{{ loop.index0 }}">
+                                    {{weekday}}
+                                </option>
+                                {% endfor %}
+                            </select>
                         </div>
 
                         <div class="input-block">
@@ -135,10 +128,11 @@
                 </p>
                 <button type="submit" form="create-class">Salvar cadastro</button>
             </footer>
-           
+
         </main>
 
     </div>
 
 </body>
+
 </html>
